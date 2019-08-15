@@ -71,25 +71,20 @@ app.use('/slack/events', slackEvents.expressMiddleware());
 
 // *** Greeting any user that says "hi" ***
 slackEvents.on('message', (message, body) => {
-    console.log(message)
-  // Only deal with messages that have no subtype (plain messages) and contain 'hi'
-  if (!message.subtype && message.text.indexOf('hi') >= 0) {
-    // Initialize a client
-    const slack = getClientByTeamId(body.team_id);
-    // Handle initialization failure
-    if (!slack) {
-      return console.error('No authorization found for this team. Did you install the app through the url provided by ngrok?');
+    if (message.channel === 'CMDHMT59D' || message.channel == 'CM5BF6N3B' || message.channel == 'CMDTVKSHL'){
+    if (message.client_msg_id){
+        console.log(message)
+        clientSlack = new WebClient
+        WebClient.send({ channel: 'leslie-summary', text: 'Hello there' });
+        // (async () => {
+        //     // See: https://api.slack.com/methods/chat.postMessage
+        //     const res = await slackEvents.send({ channel: 'leslie-summary', text: 'Hello there' });
+          
+        //     // `res` contains information about the posted message
+        //     console.log('Message sent: ', res.ts);
+        //   })();
     }
-
-    (async () => {
-      try {
-        // Respond to the message back in the same channel
-        const response = await slack.chat.postMessage({ channel: message.channel, text: `Hello <@${message.user}>! :tada:` });
-      } catch (error) {
-        console.log(error.data);
-      }
-    })();
-  }
+    }
 });
 
 // *** Responding to reactions with the same emoji ***
